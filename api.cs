@@ -22,9 +22,14 @@ public class CRT_SCREEN_MENU
         for (int i = 0; i <  menu.children.Count; i++)
         {
             string text = "";
-            if(i == index)
+            if(i == index && menu.children[i].selectable == true)
             {
                 text = "> " + menu.children[i].text;
+            }
+            else if (i == index && menu.children[i].selectable == false)
+            {
+                index += 1;
+                text = menu.children[i].text;
             }
             else
             {
@@ -32,6 +37,11 @@ public class CRT_SCREEN_MENU
             }
             // make the text be visible on screen
         }
+    }
+
+    public int MenuSelect(Menu menu)
+    {
+        return menu.children[index].id; // API ENDPOINT: returns the id of the selected item so one can get the id, look it up, and know what to do with the product
     }
 
     public void menuUp()
