@@ -15,10 +15,13 @@ public class CRT_SCREEN_MENU
 {
     public List<GUID> menuChioces;
     public int index = 0;
+    bool selected = false; // if an option has been selected or not
+    bool flipped = false; // if the selectability of the SelectableObjects have been flipped
     public void MakeMenu(Menu menu)
     {
-        if(index > menu.children.Count) { index = menu.children.Count; }
-        if(index < 0) { index = 0; }
+        // clear the text
+        if(index > menu.children.Count) { index = 0; }
+        if(index < 0) { menu.children.Count; }
         for (int i = 0; i <  menu.children.Count; i++)
         {
             string text = "";
@@ -33,7 +36,7 @@ public class CRT_SCREEN_MENU
             }
             else
             {
-                text = menu.children[i].text;
+                text = menu.children[i].text + "/n";
             }
             // make the text be visible on screen
         }
@@ -41,9 +44,33 @@ public class CRT_SCREEN_MENU
 
     public int MenuSelect(Menu menu)
     {
-        return menu.children[index].id; // API ENDPOINT: returns the id of the selected item so one can get the id, look it up, and know what to do with the product
+        if(selected == false)
+        {
+            if(menu.children[index].children = false)
+            {
+                return menu.children[index].id; // API ENDPOINT: returns the id of the selected item so one can get the id, look it up, and know what to do with the product
+                selected = true;
+            }
+            else
+            {
+                flip(menu); // go to the inner list of MenuObjects
+            }
+        }
     }
-
+    public void MenuGoBack(Menu menu)
+    {
+        if(selected) { selected = false; }
+        if(flipped) { flip(menu); }
+        MakeMenu(menu);
+    }
+    void flip(Menu menu)
+    {
+        foreach(var child in menu.children)
+        {
+            child.selectable = !child.selectable;
+            flipped = !flipped;
+        }
+    }
     public void menuUp()
     {
         index--;
@@ -78,6 +105,7 @@ public class MenuObject
     public bool selectable;
     public GUID id;
     public MenuObject parent; // indent it and make it non selectable unless parent is selected
+    public bool children;
 }
 public class Menu
 {
