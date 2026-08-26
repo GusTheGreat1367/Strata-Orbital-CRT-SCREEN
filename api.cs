@@ -27,16 +27,16 @@ public class CRT_SCREEN_MENU
             string text = "";
             if(i == index && menu.children[i].selectable == true)
             {
-                text = "> " + menu.children[i].text;
+                text = "> " += menu.children[i].text +"\n";
             }
             else if (i == index && menu.children[i].selectable == false)
             {
                 index += 1;
-                text = menu.children[i].text;
+                text += menu.children[i].text + "\n";
             }
             else
             {
-                text = menu.children[i].text + "/n";
+                text += menu.children[i].text + "\n";
             }
             // make the text be visible on screen
         }
@@ -54,6 +54,18 @@ public class CRT_SCREEN_MENU
             else
             {
                 flip(menu); // go to the inner list of MenuObjects
+            }
+        }
+    }
+    public void createSubMenu(List<string> subs, Menu menu, MenuObject parent)
+    {
+        //Function to make sub-menus -> create a list<string> make a MenuObject
+        // for each of the strings and make the parent be the parent MenuObject then when writing each menuobject indent the sub-menus
+        if(menu.children.Contains(parent))
+        {
+            foreach(var child in subs)
+            {
+                Menu.Add(new MenuObject(child, false, Guid.NewGuid(), parent, true)); // make a new child object who's parent = parent
             }
         }
     }
