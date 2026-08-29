@@ -72,6 +72,7 @@ public class CRT_SCREEN_TEST : MonoBehaviour
     void Start()
     {
         crt_screen_menu.SCtext = text; // init the TMP_Text element and set it to the normal text
+        // populate the menu array of children
         menu.children.Add(one);
         menu.children.Add(two);
         menu.children.Add(three);
