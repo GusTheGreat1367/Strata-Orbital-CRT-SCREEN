@@ -12,6 +12,7 @@ public class CRT_SCREEN_TEST : MonoBehaviour
     public TMP_Text text;
 
     public InputActions player;
+    public InputAction select;
     public InputAction up;
     public InputAction down;
     public InputAction yes;
@@ -54,6 +55,7 @@ public class CRT_SCREEN_TEST : MonoBehaviour
         down = player.menuNav.Down;
         yes = player.menuNav.Right;
         no = player.menuNav.Left;
+        select = player.menuNav.change;
     }
     public void OnEnable()
     {
@@ -61,6 +63,7 @@ public class CRT_SCREEN_TEST : MonoBehaviour
         down.Enable();
         yes.Enable();
         no.Enable();
+        select.Enable();
     }
     public void OnDisable()
     {
@@ -68,11 +71,11 @@ public class CRT_SCREEN_TEST : MonoBehaviour
         down.Disable();
         no.Disable();
         yes.Disable();
+        select.Disable();
     }
     void Start()
     {
-        crt_screen_menu.SCtext = text; // init the TMP_Text element and set it to the normal text
-        // populate the menu array of children
+        crt_screen_menu.SCtext = text;
         menu.children.Add(one);
         menu.children.Add(two);
         menu.children.Add(three);
@@ -105,7 +108,10 @@ public class CRT_SCREEN_TEST : MonoBehaviour
             crt_screen_menu.MenuGoBack(menu);
         }
         //TEST: HOW TO CHANGE JUST THE ITEM "one" IN THE MENU TO "1"
-        //crt_screen_menu.changeMenuItem(menu, one.id, "1");
+        if(select.WasPressedThisFrame())
+        {
+            crt_screen_menu.changeMenuItem(menu, one.id, "1");
+        }
     }
 
 }
