@@ -107,11 +107,9 @@ public class CRT_SCREEN_TEST : MonoBehaviour
         {
             crt_screen_menu.MenuGoBack(menu);
         }
-        //TEST: HOW TO CHANGE JUST THE ITEM "one" IN THE MENU TO "1"
-        if(select.WasPressedThisFrame())
+        if(select.WasPressedThisFrame()) //HOW TO CHANGE JUST THE ITEM "one" IN THE MENU TO "1"
         {
             crt_screen_menu.changeMenuItem(menu, one.id, "1");
         }
     }
-
 }
