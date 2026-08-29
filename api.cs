@@ -126,7 +126,7 @@ namespace CRT_SCREEN
             MakeMenu(menu);
         }
 
-        public void changeMenuItem(Menu menu, Guid item, string change) // test
+        public void changeMenuItem(Menu menu, Guid item, string change)
         {
             MenuObject newMO = null;
             int index = 0;
