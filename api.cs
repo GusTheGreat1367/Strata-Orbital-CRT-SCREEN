@@ -16,20 +16,29 @@ namespace CRT_SCREEN
         public TMP_Text SCtext;
         public void MakeMenu(Menu menu) 
         {
+            int nonSelect = 0;
+            foreach(var sel in menu.children)
+            {
+                if(!sel.selectable)
+                {
+                    nonSelect++;
+                }
+            }
+            // the "(1+nonSelect)" makes it so you only navigate through the selectable items
+            if(!flipped)
+            {
+                if(index > menu.children.Count-(1+nonSelect)) { index = 0; }
+                if(index < 0) { index = menu.children.Count-(1+nonSelect); }
+            }
+            else // you are in a sub-menu
+            {
+                if(index > menu.children.Count-1) { index = 0; }
+                if(index < 0) { index = menu.children.Count-1; }
+            }
             // cycle through the list, so if ur at the bottom of it and go down, go to the top, and vice versa
-            if(index > menu.children.Count-1) { index = 0; }
-            if(index < 0) { index = menu.children.Count-1; }
 
             // clear the text
             string text = "";
-            int selItem = 0;
-            foreach(var selectableItem in menu.children) // get the number of items that are selectable
-            {
-                if (selectableItem.selectable)
-                {
-                    selItem++;
-                }
-            }
             for (int i = 0; i <=  menu.children.Count-1; i++) 
             {
                 if(menu.children[i].selectable == true)
