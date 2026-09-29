@@ -1,8 +1,8 @@
 using UnityEngine;
 using System;
-using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 
 namespace CRT_SCREEN
@@ -55,12 +55,14 @@ namespace CRT_SCREEN
                 else if (i == index && menu.children[i].selectable == false) // you can't select this item, skip it
                 {
                     index += 1;
-                    text += menu.children[i].text + "\n";
+                    //text += menu.children[i].text + "\n";
                 }
+                /*
                 else // indent the non-selectable items
                 {
                     text += menu.children[i].text + "\n";
                 }
+                */
                 // make the text be visible on screen
                 SCtext.text = text;
             }
@@ -68,13 +70,12 @@ namespace CRT_SCREEN
 
         public void MenuSelect(Menu menu)
         {
-            if(selected == false)
+            if(selected == false) // if it hasn't been selected
             {
-                if(menu.children[index].child == false)
+                if(menu.children[index].children == false) // does it have children? If so, lets see them
                 {
-                    string retGuid = menu.children[index].id.ToString();
-                    SendAPI(menu); // API ENDPOINT: returns the id of the selected item so one can get the id, look it up, and know what to do with the product
                     selected = true;
+                    MakeMenu(menu); // update the menu display after selecting an item, just for now
                 }
                 else
                 {
@@ -82,14 +83,9 @@ namespace CRT_SCREEN
                 }
             }
         }
-        Guid SendAPI(Menu menu)
-        {
-            Guid retGuid = menu.children[index].id;
-            Debug.Log(retGuid);
-            return retGuid;
-        }
         public void createSubMenu(List<string> subs, Menu menu, MenuObject parent)
         {
+            parent.children = true;
             //Function to make sub-menus -> create a list<string> make a MenuObject
             // for each of the strings and make the parent be the parent MenuObject then when writing each menuobject indent the sub-menus
             if(menu.children.Contains(parent))
@@ -97,13 +93,27 @@ namespace CRT_SCREEN
                 foreach(var child in subs)
                 {
                     MenuObject sub = new MenuObject();
-                    sub.text = "    " + child;
+                    //sub.text = "    " + child; <- for deprecated menu navigation
+                    sub.text = child;
                     sub.selectable = false;
                     sub.id = Guid.NewGuid();
                     sub.parent = parent;
-                    sub.child = true;
+                    sub.child = true; // it's a child 
+                    sub.children = false; // it doesn't have children
                     menu.children.Add(sub); // make a new child object who's parent = parent and add it to the list of menu items
                 }
+            }
+        }
+        public Guid GetReturnedValue(Menu menu) // bugged, it stops the game and menu navigation after selecting in a submenu
+        {
+            if(selected)
+            {
+                Guid retGuid = menu.children[index].id;
+                return retGuid; // API ENDPOINT: returns the id of the selected item so one can get the id, look it up, and know what to do with the product
+            }
+            else
+            {
+                return Guid.Empty;
             }
         }
         public void MenuGoBack(Menu menu)
@@ -160,6 +170,7 @@ namespace CRT_SCREEN
         public Guid id;
         public MenuObject parent; // indent it and make it non selectable unless parent is selected
         public bool child; // is it the child of another MenuObject
+        public bool children; // does it have any children
     }
     public class Menu
     {
@@ -179,7 +190,7 @@ namespace CRT_SCREEN
 
         public void WRITE_TEXT(string text) // seperate the text new lines by "\n"
         {
-            string[] finishedText = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            //string[] finishedText = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
         }
     }
@@ -187,5 +198,16 @@ namespace CRT_SCREEN
     public class CRT_SCREEN_GRAPHICS // 2d vector graphics
     {
         //
+    }
+}
+
+public class functions
+{
+    public GameObject Instantiate(GameObject obj, Vector2 pos, Quaternion rot)
+    {
+        GameObject new_obj = obj;
+        new_obj.transform.position = pos;
+        new_obj.transform.rotation = rot;
+        return new_obj;
     }
 }
