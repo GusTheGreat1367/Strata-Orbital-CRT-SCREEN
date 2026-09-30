@@ -14,6 +14,7 @@ namespace CRT_SCREEN
         bool selected = false; // if an option has been selected or not
         bool flipped = false; // if the selectability of the SelectableObjects have been flipped
         public TMP_Text SCtext;
+        public List<MenuObject> currentMenuChildren;
         public void MakeMenu(Menu menu) 
         {
             int nonSelect = 0;
@@ -116,17 +117,16 @@ namespace CRT_SCREEN
             {
                 foreach(var child in subs)
                 {
-                    MenuObject sub = new MenuObject();
+                    MenuObject sub = new MenuObject(child, parent);
                     //sub.text = "    " + child; <- for deprecated menu navigation
-                    sub.text = child;
-                    sub.selectable = false;
-                    sub.id = Guid.NewGuid();
-                    sub.parent = parent;
-                    sub.child = true; // it's a child 
-                    sub.children = false; // it doesn't have children
                     menu.children.Add(sub); // make a new child object who's parent = parent and add it to the list of menu items
                 }
             }
+        }
+
+        public void find(Guid item)
+        {
+            // find the item in every MenuObject
         }
         public Guid GetReturnedValue(Menu menu) // bugged, just everything is bugged,  
         {                                                         //               _  \ /  _
@@ -199,12 +199,29 @@ namespace CRT_SCREEN
         public MenuObject parent; // indent it and make it non selectable unless parent is selected
         public bool child; // is it the child of another MenuObject
         public bool children; // does it have any children
+
+        public MenuObject(string text, MenuObject parent = null)
+        {
+            this.text = text;
+            this.selectable = parent != null ? false : true;
+            this.id = Guid.NewGuid();
+            this.parent = parent;
+            this.child = parent != null ? true : false;
+            this.children = false;
+        }
     }
     public class Menu
     {
         public string Title;
         public List<MenuObject> children;
         public Guid id;
+
+        public Menu(string title)
+        {
+            this.Title = title;
+            this.id = Guid.NewGuid();
+            this.children = new List<MenuObject>();
+        }
     }
     public class CRT_SCREEN_TEXT // text creator
     {
@@ -226,16 +243,5 @@ namespace CRT_SCREEN
     public class CRT_SCREEN_GRAPHICS // 2d vector graphics
     {
         //
-    }
-}
-
-public class functions
-{
-    public GameObject Instantiate(GameObject obj, Vector2 pos, Quaternion rot)
-    {
-        GameObject new_obj = obj;
-        new_obj.transform.position = pos;
-        new_obj.transform.rotation = rot;
-        return new_obj;
     }
 }
