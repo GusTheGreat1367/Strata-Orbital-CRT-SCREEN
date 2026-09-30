@@ -86,28 +86,33 @@ public class CRT_SCREEN_TEST : MonoBehaviour
         if(up.WasPressedThisFrame()) // navigate up on the menu
         {
             crt_screen_menu.menuUp(menu);
+            Debug.Log("Moving Up");
         }
         if(down.WasPressedThisFrame()) // navigate down on the menu
         {
             crt_screen_menu.menuDown(menu);
+            Debug.Log("Moving Down");
         }
         if(yes.WasPressedThisFrame()) // select the current value
         {
             crt_screen_menu.MenuSelect(menu);
-            Guid selected_object = crt_screen_menu.GetReturnedValue(menu); 
+            Debug.Log("Selecting item");
+            //Guid selected_object = crt_screen_menu.GetReturnedValue(menu); 
             // BEWARE!!! If an object wasn't selected, and the menu just moved to a submenu, the selected_object will be a Guid.Empty
             /* do this to check:
-            if(selected_object != Guid.Empty) { runCode(); }
+            if(selected_object != Guid.Empty) { runCode(selected_object); }
             */
-            Debug.Log(selected_object);
+            //Debug.Log(selected_object);
         }
         if(no.WasPressedThisFrame()) // revert back on the menu
         {
             crt_screen_menu.MenuGoBack(menu);
+            Debug.Log("Going Back");
         }
         if(select.WasPressedThisFrame()) //HOW TO CHANGE JUST THE ITEM "one" IN THE MENU TO "1"
         {
             crt_screen_menu.changeMenuItem(menu, one.id, "1");
+            Debug.Log("Changing menu item 'one' to '1'");
         }
     }
 }
