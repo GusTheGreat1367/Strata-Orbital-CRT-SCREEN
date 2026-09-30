@@ -16,30 +16,9 @@ public class CRT_SCREEN_TEST : MonoBehaviour
     public InputAction down;
     public InputAction yes;
     public InputAction no;
-    Menu menu = new Menu()
-    {
-        Title = "Menu 01",
-        id = Guid.NewGuid(),
-        children = new List<MenuObject>()
-    };
-    MenuObject one = new MenuObject()
-    {
-        text = "Start",
-        selectable = true,
-        id = Guid.NewGuid(),
-        parent = new MenuObject(), 
-        child = false,
-        children = false  
-    };
-    MenuObject three = new MenuObject()
-    {
-        text = "Settings",
-        selectable = true,
-        id = Guid.NewGuid(),
-        parent = new MenuObject(), 
-        child = false,
-        children = false  
-    };
+    Menu menu = new Menu("Menu_01");
+    MenuObject one = new MenuObject("Start");
+    MenuObject three = new MenuObject("Settings");
     CRT_SCREEN_MENU crt_screen_menu = new CRT_SCREEN_MENU();
     void Awake()
     {
