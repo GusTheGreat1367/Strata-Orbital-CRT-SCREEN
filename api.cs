@@ -17,8 +17,11 @@ namespace CRT_SCREEN
         public void MakeMenu(Menu menu) 
         {
             int nonSelect = 0;
+            selected = false; // reset the selection state when making a new menu
+            Debug.Log("Making menu with " + menu.children.Count + " children.");
             foreach(var sel in menu.children)
             {
+                Debug.Log("Menu child: " + sel.text);
                 if(!sel.selectable)
                 {
                     nonSelect++;
@@ -68,22 +71,43 @@ namespace CRT_SCREEN
             }
         }
 
-        public void MenuSelect(Menu menu)
+        /*
+        public void MenuSelect(Menu menu) // also bugged
         {
-            if(selected == false) // if it hasn't been selected
+            if(selected == false) // if nothing was selected
             {
-                if(menu.children[index].children == false) // does it have children? If so, lets see them
+                // possibly move this to an "&&" for the true if value?
+                Debug.Log("No item selected yet.");
+                if(menu.children[index].children == false) // if the current item doesn't have children, mark it as selected
                 {
                     selected = true;
-                    MakeMenu(menu); // update the menu display after selecting an item, just for now
+                    Debug.Log("Item selected: " + menu.children[index].text);
                 }
-                else
+                else // let's see the item's children
                 {
+                    Debug.Log("Navigating to children of: " + menu.children[index].text);
                     flip(menu); // go to the inner list of MenuObjects
                 }
             }
         }
-        public void createSubMenu(List<string> subs, Menu menu, MenuObject parent)
+        */
+
+        public void MenuSelect(Menu menu)
+        {
+            if(!menu.children[index].children && menu.children[index].selectable && selected == false)
+            {
+                selected = true;
+                Debug.Log("Item selected: " + menu.children[index].text);
+            }
+            else
+            {
+                flip(menu); // go to the inner list of MenuObjects
+            }
+        }
+
+        // FOR THE BUGS, Debug.Log(); until they confess
+
+        public void createSubMenu(List<string> subs, Menu menu, MenuObject parent) 
         {
             parent.children = true;
             //Function to make sub-menus -> create a list<string> make a MenuObject
@@ -104,15 +128,18 @@ namespace CRT_SCREEN
                 }
             }
         }
-        public Guid GetReturnedValue(Menu menu) // bugged, it stops the game and menu navigation after selecting in a submenu
-        {
-            if(selected)
-            {
-                Guid retGuid = menu.children[index].id;
+        public Guid GetReturnedValue(Menu menu) // bugged, just everything is bugged,  
+        {                                                         //               _  \ /  _
+            if(selected)                                          //                \ (0) /
+            {                                                     //                 (|#|)
+                Guid retGuid = menu.children[index].id;           //               _/ (0) \_
+                Debug.Log("Returned value for selected item: " + retGuid);  
                 return retGuid; // API ENDPOINT: returns the id of the selected item so one can get the id, look it up, and know what to do with the product
             }
             else
             {
+                Debug.Log("No item selected, returning Guid.Empty");
+                MakeMenu(menu);
                 return Guid.Empty;
             }
         }
@@ -122,6 +149,7 @@ namespace CRT_SCREEN
             if(flipped) { flip(menu); }
             index = 0;
             MakeMenu(menu);
+            Debug.Log("Menu went back, index reset to 0");
         }
         void flip(Menu menu)
         {
